@@ -81,13 +81,25 @@ export default function Profile() {
 					fetch(`/api/users/${user.uid}`),
 				]);
 
-				if (!catRes.ok || !sessionsRes.ok || !userRes.ok) {
+				if (!catRes.ok || !sessionsRes.ok) {
 					throw new Error("Failed to load profile data");
+				}
+
+				// Handle user not found separately
+				let userData;
+				if (!userRes.ok) {
+					if (userRes.status === 404) {
+						// User not found - create default empty user data
+						userData = { coins: 0 };
+					} else {
+						throw new Error("Failed to load user data");
+					}
+				} else {
+					userData = await userRes.json();
 				}
 
 				const catData = await catRes.json();
 				const sessionsData = await sessionsRes.json();
-				const userData = await userRes.json();
 
 				const sessionsList = Array.isArray(sessionsData.sessions)
 					? sessionsData.sessions

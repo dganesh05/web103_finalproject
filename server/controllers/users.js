@@ -12,6 +12,11 @@ const getUser = async(req, res) => {
         `
         
         const results = await pool.query(getQuery, [uid])
+        
+        if (results.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' })
+        }
+        
         res.status(200).json(results.rows[0])
 
     } catch (err) {
