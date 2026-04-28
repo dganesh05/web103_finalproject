@@ -61,7 +61,9 @@ const createCatsTable = async () => {
         userId TEXT NOT NULL UNIQUE REFERENCES users(uid) ON DELETE CASCADE,
         name TEXT NOT NULL,
         image TEXT,
-        energy INTEGER NOT NULL DEFAULT 100 CHECK (energy >= 0)
+        energy INTEGER NOT NULL DEFAULT 100 CHECK (energy >= 0),
+        lastEnergyUpdated TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        cycleCount INTEGER NOT NULL DEFAULT 0 CHECK (cycleCount >= 0)
       );
     `;
 
@@ -113,7 +115,12 @@ const createStudySessionsTable = async () => {
         profileId INTEGER REFERENCES pomodoro_profiles(id) ON DELETE SET NULL,
         startTime TIMESTAMPTZ NOT NULL,
         endTime TIMESTAMPTZ,
-        coinsEarned INTEGER NOT NULL DEFAULT 0 CHECK (coinsEarned >= 0)
+        coinsEarned INTEGER NOT NULL DEFAULT 0 CHECK (coinsEarned >= 0),
+        workMinutes INTEGER NOT NULL DEFAULT 0 CHECK (workMinutes >= 0),
+        tasksCompleted INTEGER NOT NULL DEFAULT 0 CHECK (tasksCompleted >= 0),
+        catEnergyAtStart INTEGER NOT NULL DEFAULT 100 CHECK (catEnergyAtStart >= 0),
+        catEnergyAfter INTEGER NOT NULL DEFAULT 100 CHECK (catEnergyAfter >= 0),
+        wasBlockCompleted BOOLEAN NOT NULL DEFAULT FALSE
       );
     `;
 

@@ -20,12 +20,9 @@ export default function RewardModal({
 	minutes = 0,
 	tasks = 0,
 	cat,
+	coinsEarned = 0,
+	blockCompleted = false,
 }) {
-	const getRewardedCoins = () => {
-		const coins = (Math.min(minutes, cat?.energy) + 5 * tasks) * 3;
-		return coins;
-	};
-
 	return (
 		<Dialog open={open} onClose={onClose}>
 			<DialogTitle>Rewards!</DialogTitle>
@@ -41,7 +38,7 @@ export default function RewardModal({
                         </Bounce>
 					<Stack spacing={2}>
 						<Typography align="center">
-							{cat?.name} found {getRewardedCoins()} coins while playing!
+							{cat?.name} found {coinsEarned} coins while playing!
 						</Typography>
 
                         <Divider sx={{width: "100%"}}></Divider>
@@ -76,17 +73,23 @@ export default function RewardModal({
 								</IconButton>
 							</Tooltip>
 							<Typography align="center" variant="body2">
-								{cat?.name}'s energy: {Math.max(cat?.energy - minutes, 0)}
+								{cat?.name}'s energy: {cat?.energy}
 							</Typography>
 						</Stack>
 
                         <Divider sx={{width: "100%"}}></Divider>
 
+						{blockCompleted && (
+							<Typography align="center" variant="body2" sx={{ color: "warning.main", fontWeight: "bold" }}>
+								🔋 You completed a 4-cycle block! Energy decreased.
+							</Typography>
+						)}
+
 						<Stack direction="row" spacing={1} sx={{display: "flex", alignItems: "center", justifyContent: "center"}}>
                             <AttentionSeeker effect="tada">
                             <PawCoin/>
                             </AttentionSeeker>
-							<Typography> x {getRewardedCoins()}</Typography>
+							<Typography> x {coinsEarned}</Typography>
 						</Stack>
 					</Stack>
 				</Stack>

@@ -136,7 +136,10 @@ export default function VirtualRoom({ initialProfile = null }) {
 		pausedTime: 0,
 		pauseStartTime: null,
 	});
-	const [completedTasks, setCompletedTasks] = useState(0)
+	const [completedTasks, setCompletedTasks] = useState(0);
+	const [rewardCoinsEarned, setRewardCoinsEarned] = useState(0);
+	const [blockCompleted, setBlockCompleted] = useState(false);
+	const [userCoins, setUserCoins] = useState(0);
 
 
 	const { user } = useContext(AuthContext);
@@ -215,12 +218,12 @@ export default function VirtualRoom({ initialProfile = null }) {
 		const startTimeISO = new Date(startTime).toISOString();
 		const endTimeISO = new Date(endTimeMs).toISOString();
 
+		// Fetch completed tasks count
 		const getTasksCompleted = async () => {
 			try {
 				const res = await fetch(`/api/tasks/${user?.uid}`);
 				const data = await res.json();
 				const completedTasksList = data.filter((task) => task.completed === true);
-
 				setCompletedTasks(completedTasksList.length);
 				return completedTasksList.length;
 			} catch (err) {
@@ -229,15 +232,12 @@ export default function VirtualRoom({ initialProfile = null }) {
 			}
 		};
 
-		const completedTasksCount = await getTasksCompleted();
-		const coinsEarned = Math.max(
-			0,
-			(Math.min(completedMinutes, cat?.energy ?? 0) + 5 * completedTasksCount) * 3,
-		);
+		const tasksCompleted = await getTasksCompleted();
 
-		const persistSessionAndCoins = async () => {
+		// Call the server-authoritative session endpoint
+		const persistSessionAndUpdateRewards = async () => {
 			try {
-				await fetch("/api/sessions", {
+				const sessionResponse = await fetch("/api/sessions", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({
@@ -245,37 +245,33 @@ export default function VirtualRoom({ initialProfile = null }) {
 						profileId: selectedProfile?.id,
 						startTime: startTimeISO,
 						endTime: endTimeISO,
-						coinsEarned,
+						workMinutes: completedMinutes,
+						tasksCompleted: tasksCompleted,
+						catEnergyAtStart: cat?.energy ?? 100,
 					}),
 				});
 
-				const userResponse = await fetch(`/api/users/${user?.uid}`);
-				if (!userResponse.ok) {
-					throw new Error("Failed to fetch user for coin update");
+				if (!sessionResponse.ok) {
+					throw new Error("Failed to create session");
 				}
 
-				const userData = await userResponse.json();
-				const currentCoins = Number(userData?.coins ?? 0);
-				const updatedCoins = currentCoins + coinsEarned;
+				const sessionData = await sessionResponse.json();
+				
+				// Update local state with server-returned values
+				setRewardCoinsEarned(sessionData.coinsEarned);
+				setBlockCompleted(sessionData.blockCompleted);
+				setUserCoins(sessionData.userCoins);
 
-				const updateResponse = await fetch(`/api/users/${user?.uid}`, {
-					method: "PATCH",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ coins: updatedCoins }),
-				});
-
-				if (!updateResponse.ok) {
-					throw new Error("Failed to update user coins");
-				}
+				// Refresh cat to get updated energy
+				await refreshCat();
 			} catch (err) {
-				console.error("Failed to save session and update coins:", err);
+				console.error("Failed to save session and update rewards:", err);
 			}
 		};
 
-		await persistSessionAndCoins();
-
+		await persistSessionAndUpdateRewards();
 		setShowRewards(true);
-	}, [cat?.energy, selectedProfile?.id, sessionTime, user?.uid]);
+	}, [cat?.energy, selectedProfile?.id, sessionTime, user?.uid, refreshCat]);
 
 	const skipToNextMode = () => {
 		stopTimer();
@@ -569,6 +565,8 @@ export default function VirtualRoom({ initialProfile = null }) {
 					minutes={rewardMinutes}
 					tasks={completedTasks}
 					cat={cat}
+					coinsEarned={rewardCoinsEarned}
+					blockCompleted={blockCompleted}
 				/>
 			</Box>
 		</Box>
