@@ -12,8 +12,6 @@ import ShopItemDetails from './pages/Shop/ShopItemDetails.jsx'
 
 function App() {
 
-  const API_URL = import.meta.env.PROD ? '{YOUR_SERVER_URL}' : '/api';
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

@@ -58,8 +58,9 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json())
-app.use(cors())
-
+app.use(cors({
+  origin: 'https://client-dydj.onrender.com/' // Replace with your client's URL
+}));
 
 app.get('/', (req, res) => {
     res.status(200).send(`

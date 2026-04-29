@@ -13,7 +13,7 @@ import {
 import { useCallback, useContext, useEffect, useState } from "react";
 import AuthContext from "../../contexts/AuthContext";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://server-kp1m.onrender.com/";
 
 export default function TasksDrawer({ open, onClose }) {
 	const { user } = useContext(AuthContext);
