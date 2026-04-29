@@ -9,12 +9,12 @@ This unit, be sure to complete all tasks listed below. To complete a task, place
 - [ ] Deploy your project on Render
   - [ ] In `readme.md`, add the link to your deployed project
 - [x] Update the status of issues in your project board as you complete them
-- [ ] In `readme.md`, check off the features you have completed in this unit by adding a ✅ emoji in front of their title
-  - [ ] Under each feature you have completed, **include a GIF** showing feature functionality
+- [x] In `readme.md`, check off the features you have completed in this unit by adding a ✅ emoji in front of their title
+  - [x] Under each feature you have completed, **include a GIF** showing feature functionality
 - [ ] In this document, complete the **Reflection** section below
-- [ ] 🚩🚩🚩**Complete the Final Project Feature Checklist section below**, detailing each feature you completed in the project (ONLY include features you implemented, not features you planned)
-- [ ] 🚩🚩🚩**Record a GIF showing a complete run-through of your app** that displays all the components included in the **Final Project Feature Checklist** below
-  - [ ] Include this GIF in the **Final Demo GIF** section below
+- [x] 🚩🚩🚩**Complete the Final Project Feature Checklist section below**, detailing each feature you completed in the project (ONLY include features you implemented, not features you planned)
+- [x] 🚩🚩🚩**Record a GIF showing a complete run-through of your app** that displays all the components included in the **Final Project Feature Checklist** below
+  - [x] Include this GIF in the **Final Demo GIF** section below
 
 ## Final Project Feature Checklist
 
@@ -65,8 +65,8 @@ Complete the checklist below detailing each baseline, custom, and stretch featur
 
 👉🏾👉🏾👉🏾 Check off each completed feature below.
 
-- [ ] A subset of pages require the user to log in before accessing the content
-  - [ ] Users can log in and log out via GitHub OAuth with Passport.js
+- [x] A subset of pages require the user to log in before accessing the content
+  - [ ] Users can log in and log out via GitHub OAuth with Passport.js (used Firebase Auth instead)
 - [x] Restrict available user options dynamically, such as restricting available purchases based on a user's currency
 - [x] Show a spinner while a page or page element is loading
 - [x] Disable buttons and inputs during the form submission process
@@ -80,26 +80,27 @@ Complete the checklist below detailing each baseline, custom, and stretch featur
 
 ## Final Demo GIF
 
-🔗 [Here's a GIF walkthrough of the final project](👉🏾👉🏾👉🏾 your link here)
+🔗 [Here's a GIF walkthrough of the final project]
+<img src="../planning/assets/gifs/preview.gif">
 
 ## Reflection
 
 ### 1. What went well during this unit?
 
-[👉🏾👉🏾👉🏾 your answer here]
+For the final stretch, our group did the most to come together, and make sure everything looked and functioned as closely to as we envisioned. Everyone played an important role in tying everything together at the end of the project, and this distributed balance made the process incredibly smooth.
 
 ### 2. What were some challenges your group faced in this unit?
 
-[👉🏾👉🏾👉🏾 your answer here]
+Implementing all the features we intended required more time than we had, so the major difficulty was prioritization. We had to decide which features would be a priority for demo day, and which ones we were willing to drop. Ultimately, we didn't have to drop any features that were absolute requirements for the project. 
 
 ### 3. What were some of the highlights or achievements that you are most proud of in this project?
 
-[👉🏾👉🏾👉🏾 your answer here]
+We are most proud of the visuals, as we wanted to create a cozy, comforting vibe with this project, which we believe we did. All the art and the assets have been integrated well into our clean and smooth UI, and we hope that everyone who sees our project feels the same.
 
 ### 4. Reflecting on your web development journey so far, how have you grown since the beginning of the course?
 
-[👉🏾👉🏾👉🏾 your answer here]
+Since the beginning of the course, we've learned a variety of technical skills, being able to fully hone the frontend and backend of our web apps as we see fit. Going into this final project, we felt confident in being able to apply all the skills we learned from not only this course, but WEB 102 and 101 before it as well.
 
 ### 5. Looking ahead, what are your goals related to web development, and what steps do you plan to take to achieve them?
 
-[👉🏾👉🏾👉🏾 your answer here]
+Our goals related to web development are to keep maintaining and upskilling, discover new and interesting APIs, create projects building off of the strong foundation these courses have given us, and seeing how to creatively apply our fullstack experience to personal projects, and even in industry.
