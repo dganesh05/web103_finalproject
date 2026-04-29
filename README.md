@@ -4,7 +4,7 @@ CodePath WEB103 Final Project
 
 Designed and developed by: Grecia Osorio, Brandon Budhan, Divya Ganesh, Lan Doam
 
-🔗 Link to deployed app:
+🔗 Link to deployed app: https://client-dydj.onrender.com/
 
 ## About
 Pawmodoro is a gamified study timer experience utilizing the Pomodoro technique!
