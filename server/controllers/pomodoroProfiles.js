@@ -1,8 +1,11 @@
 import { pool } from "../config/database.js";
+import { initializeDefaultPomodoroProfile } from "./users.js";
 
 const getAllProfiles = async (req, res) => {
     try {
         const uid = req.params.uid
+
+        await initializeDefaultPomodoroProfile(uid)
 
         // ORDER BY ensures that default profile is ALWAYS the first one in the returned json
         const getQuery = `

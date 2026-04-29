@@ -1,6 +1,8 @@
 import { pool } from "./database.js";
 import "./dotenv.js";
 import { shopItems } from "../../client/src/data/shopItems.js";
+import { fileURLToPath } from "url";
+import path from "path";
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -39,7 +41,7 @@ export const createUsersTable = async () => {
         uid TEXT PRIMARY KEY,
         name TEXT NOT NULL,
         profilePicture TEXT,
-        coins INTEGER NOT NULL DEFAULT 0 CHECK (coins >= 0),
+        coins INTEGER NOT NULL DEFAULT 500 CHECK (coins >= 0),
         createdAt TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
       );
     `;
@@ -266,6 +268,7 @@ export const seedDatabase = async ({ closePool = true } = {}) => {
 };
 
 // Auto-run only when this script is executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+	console.log("🔄 Starting database reset...");
 	await seedDatabase({ closePool: true });
 }

@@ -13,7 +13,14 @@ import {
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import TasksDrawer from "./TasksDrawer";
 import Inventory from "./Inventory";
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import {
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import { Bounce } from "react-awesome-reveal";
 import SettingsIcon from "@mui/icons-material/Settings";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
@@ -270,6 +277,7 @@ export default function VirtualRoom({ initialProfile = null }) {
 	const [rewardMinutes, setRewardMinutes] = useState(0);
 	const [isTimerReady, setIsTimerReady] = useState(false);
 	const [isRoomReady, setIsRoomReady] = useState(false);
+	const defaultProfileSeededForUser = useRef(null);
 	const [sessionTime, setSessionTime] = useState({
 		startTime: null,
 		endTime: null,
@@ -280,6 +288,17 @@ export default function VirtualRoom({ initialProfile = null }) {
 	const [animateCat, setAnimateCat] = useState(false);
 
 	const { user } = useContext(AuthContext);
+
+	useEffect(() => {
+		console.log("========= User: ============\n", user);
+	}, [user]);
+
+	useEffect(() => {
+		console.log(
+			"========= Is Loading Room: ============\n",
+			!isTimerReady || !isRoomReady,
+		);
+	}, [isTimerReady, isRoomReady]);
 
 	const roomImageSources = useMemo(
 		() =>
@@ -530,8 +549,59 @@ export default function VirtualRoom({ initialProfile = null }) {
 		const results = await fetch(`/api/pomodoro_profiles/${user.uid}`);
 		const data = await results.json();
 
-		setSelectedProfile(data[0]);
+		if (!data || data.length === 0) {
+			if (defaultProfileSeededForUser.current !== user.uid) {
+				defaultProfileSeededForUser.current = user.uid;
+
+				const createResponse = await fetch(`/api/pomodoro_profiles`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						userId: user.uid,
+						name: "Default Pomodoro",
+						timeOn: 25,
+						timeBreak: 5,
+						timeLongBreak: 15,
+						isDefault: true,
+					}),
+				});
+
+				const createdProfile = await createResponse.json();
+
+				if (createResponse.ok && createdProfile) {
+					setAllProfiles([createdProfile]);
+					setSelectedProfile(createdProfile);
+					setIsTimerReady(true);
+					return;
+				}
+			}
+
+			setAllProfiles([]);
+			setSelectedProfile(null);
+			setIsTimerReady(true); // ✅ prevent infinite loading
+			return;
+		}
+
 		setAllProfiles(data);
+		setSelectedProfile((currentProfile) => {
+			if (currentProfile) {
+				const stillExists = data.find(
+					(profile) => profile.id === currentProfile.id,
+				);
+				if (stillExists) {
+					return stillExists;
+				}
+			}
+
+			return (
+				data.find((profile) => profile.isdefault || profile.isDefault) ??
+				data[0] ??
+				null
+			);
+		});
+		setIsTimerReady(true);
 	}, [user?.uid]);
 
 	const refreshCat = useCallback(async () => {
@@ -596,6 +666,21 @@ export default function VirtualRoom({ initialProfile = null }) {
 			}));
 		}
 	}, [cat?.image]);
+
+	useEffect(() => {
+		const onCatUpdated = (event) => {
+			const nextCat = event?.detail?.cat;
+			if (nextCat) {
+				setCat(nextCat);
+				return;
+			}
+
+			refreshCat();
+		};
+
+		window.addEventListener("catUpdated", onCatUpdated);
+		return () => window.removeEventListener("catUpdated", onCatUpdated);
+	}, [refreshCat]);
 
 	useEffect(() => {
 		refreshProfiles();
@@ -753,7 +838,7 @@ export default function VirtualRoom({ initialProfile = null }) {
 					sx={{
 						position: "absolute",
 						inset: 0,
-						zIndex: 2000,
+						zIndex: 50,
 						display: "flex",
 						alignItems: "center",
 						justifyContent: "center",

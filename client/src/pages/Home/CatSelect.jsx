@@ -48,6 +48,13 @@ export default function CatSelect({ open, handleClose }) {
 		const data = await results.json()
 
 		console.log(data)
+		if (typeof window !== 'undefined') {
+			window.dispatchEvent(
+				new CustomEvent('catUpdated', {
+					detail: { cat: data },
+				}),
+			)
+		}
 		handleClose()
 	}
 

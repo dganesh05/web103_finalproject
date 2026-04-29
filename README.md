@@ -23,7 +23,7 @@ Pawmodoro was inspired by the desire to have a more entertaining studying/workin
 
 Frontend: React, Material UI
 
-Backend: Express, PostgreSQL
+Backend: Express, PostgreSQL, Firebase Authentication
 
 ## Features
 
@@ -42,28 +42,32 @@ Work your way by setting up custom work and break intervals. Whether you want a 
 
 ### ✅ Earn Coins While You Work
 
-Turn your productivity into playtime! Get instant coin rewards just for checking off quick tasks, and earn massive payouts for successfully completing uninterrupted focus sessions.
+Turn your productivity into playtime! Get instant rewards just for checking off quick tasks, and earn PawCoins during your focus sessions.
 
 <img src="./planning/assets/gifs/coins.gif">
 
-### Daily Task Tracker
+### ✅ Daily Task Tracker
 
 Keep your goals organized in one place. Easily add, update, and check off your daily to-dos so you always know exactly what you need to tackle next.
 
-[gif goes here]
+<img src="./planning/assets/gifs/tasks.gif">
 
-### The Paw-Mart Shop
+### ✅ The Paw-Mart Shop
 
-Treat yourself (and your pet) with some stylish new furniture, rugs, and accessories using your coins! You can also buy various appearnaces for your pet to play in.
+Treat yourself (and your pet) with some stylish new furniture and accessories using your PawCoins! 
 
-[gif goes here]
+<img src="./planning/assets/gifs/shop.gif">
 
-### Customize Your Cat's Room
+### ✅ Customize Your Virtual Room
 
-Create the perfect cozy space for your virtual pet. Mix and match the items you've purchased to decorate the room, instantly seeing your new design come to life on your dashboard.
+Create the perfect cozy space for your virtual pet. Mix and match the items you've purchased to decorate the room, instantly seeing your new design come to life in your virtual room.
 
-[gif goes here]
+
+<img src="./planning/assets/gifs/room.gif">
 
 ## Installation Instructions
 
-[instructions go here]
+1. Clone the repository
+2. Run `npm install` in both the `client` and `server` directories
+3. In `server/`, run `npm run start`
+4. In `client/`, run `npm run dev`

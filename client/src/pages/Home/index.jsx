@@ -19,6 +19,9 @@ export default function Home() {
 	}, [catDialogOpen]);
 
 	useEffect(() => {
+
+		if (!user?.uid) return;
+		
 		let isCurrent = true; // ✅ track if this effect is still valid
 
 		const getCatInfo = async () => {
