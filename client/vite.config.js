@@ -10,7 +10,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://server-kp1m.onrender.com/'
+        target: 'https://server-kp1m.onrender.com/api'
       }
     }
   }
