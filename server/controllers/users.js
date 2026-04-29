@@ -142,7 +142,7 @@ const signInUser = async(req, res) => {
 
         const postQuery = `
             INSERT INTO users (uid, name, profilePicture, coins, createdAt)
-            VALUES ($1, $2, $3, 0, NOW())
+            VALUES ($1, $2, $3, 500, NOW())
             ON CONFLICT (uid) DO NOTHING
             RETURNING *
         `
