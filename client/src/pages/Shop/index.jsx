@@ -106,7 +106,7 @@ export default function Shop() {
 		: shopItems.filter((e) => !inventory?.some(inv => inv.shopitemid === e.id));
 
 	return (
-		<Box sx={{ pt: 4, pb: 10, px: { xs: 2, sm: 3, md: 4 } }}>
+		<Box sx={{ pt: 4, pb: 10, px: { xs: 2, sm: 3, md: 4, backgroundColor: "#f4f3ec" } }}>
 			{/* title of the page + filter buttons based on categories */}
 			<Box sx={{ pb: 5 }}>
 				<Stack
