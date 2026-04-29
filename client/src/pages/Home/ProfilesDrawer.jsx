@@ -17,13 +17,14 @@ import {
 import { IconButton, Checkbox, FormControlLabel } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import NumberField from "../../components/NumberField";
+import AuthContext from "../../contexts/AuthContext";
 
 function getInitialFormData(profile, userId) {
 	return {
 		userId: profile?.userid ?? userId ?? null,
-		name: profile?.name,
+		name: profile?.name ?? "",
 		timeOn: profile ? Number(profile.timeon) : 25,
 		timeBreak: profile ? Number(profile.timebreak) : 5,
 		timeLongBreak: profile ? Number(profile.timelongbreak) : 15,
@@ -225,9 +226,10 @@ export default function ProfilesDrawer({
 	selectedProfile,
 	setSelectedProfile,
 }) {
+	const { user } = useContext(AuthContext);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [dialogProfile, setDialogProfile] = useState(null);
-	const dialogUserId = profiles?.[0]?.userid ?? null;
+	const dialogUserId = user?.uid ?? profiles?.[0]?.userid ?? null;
 
 	const handleOpenAddDialog = () => {
 		setDialogProfile(null);

@@ -68,6 +68,42 @@ export const initializeDefaultInventory = async (userId) => {
     }
 }
 
+export const initializeDefaultPomodoroProfile = async (userId) => {
+    if (!userId) throw new Error('userId is required')
+
+    try {
+        console.log('[UsersController] Starting default pomodoro profile initialization for user:', userId)
+
+        const existingProfileRes = await pool.query(
+            'SELECT id FROM pomodoro_profiles WHERE userId = $1 AND isDefault = TRUE LIMIT 1',
+            [userId],
+        )
+
+        if (existingProfileRes.rows.length > 0) {
+            console.log('[UsersController] Pomodoro profile already exists for user:', userId)
+            return existingProfileRes.rows[0]
+        }
+
+        const insertRes = await pool.query(
+            `INSERT INTO pomodoro_profiles (userId, name, timeOn, timeBreak, timeLongBreak, isDefault)
+             VALUES ($1, $2, $3, $4, $5, TRUE)
+             RETURNING *`,
+            [userId, 'Default Pomodoro', 25, 5, 15],
+        )
+
+        console.log('[UsersController] Default pomodoro profile initialized successfully for user:', userId)
+        return insertRes.rows[0]
+    } catch (err) {
+        console.error('[UsersController] Failed to initialize default pomodoro profile:', {
+            userId,
+            error: err?.message,
+            stack: err?.stack,
+        })
+
+        throw err
+    }
+}
+
 const getUser = async(req, res) => {
 
     try {
@@ -162,6 +198,20 @@ const signInUser = async(req, res) => {
 
             const invRes = await pool.query(inventoryQuery, [uid]);
 
+            try {
+                await initializeDefaultPomodoroProfile(uid)
+                console.log('[UsersController] Default pomodoro profile verified for new user', {
+                    traceId,
+                    uid,
+                })
+            } catch (err) {
+                console.error('[UsersController] Failed to verify default pomodoro profile for new user', {
+                    traceId,
+                    uid,
+                    error: err.message,
+                })
+            }
+
             return res.json({
                 newUser: true,
                 user: results.rows[0],
@@ -181,6 +231,21 @@ const signInUser = async(req, res) => {
                 traceId,
                 rowCount: existingUser.rows.length,
             })
+
+            try {
+                await initializeDefaultPomodoroProfile(uid)
+                console.log('[UsersController] Default pomodoro profile verified for existing user', {
+                    traceId,
+                    uid,
+                })
+            } catch (err) {
+                console.error('[UsersController] Failed to verify default pomodoro profile for existing user', {
+                    traceId,
+                    uid,
+                    error: err.message,
+                })
+            }
+
             // Fetch inventory for existing user as well
             const inventoryQuery = `
                 SELECT

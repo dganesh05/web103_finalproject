@@ -231,6 +231,13 @@ export default function Profile() {
 			const updatedCat = await response.json();
 			if (updatedCat) {
 				setCat(updatedCat);
+				if (typeof window !== "undefined") {
+					window.dispatchEvent(
+						new CustomEvent("catUpdated", {
+							detail: { cat: updatedCat },
+						}),
+					);
+				}
 			} else {
 				setCat((prevCat) => {
 					if (!prevCat) return prevCat;
